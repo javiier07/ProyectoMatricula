@@ -1,39 +1,39 @@
 const mongoose = require('mongoose');
 
-const enrollmentEventSchema = new mongoose.Schema({
-  enrollmentId: {
+const eventoMatriculaSchema = new mongoose.Schema({
+  matriculaId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Enrollment',
+    ref: 'Matricula',
     required: true
   },
-  studentId: {
+  alumnoId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Usuario',
     required: true
   },
-  sectionId: {
+  seccionId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Section',
+    ref: 'Seccion',
     required: true
   },
-  action: {
+  accion: {
     type: String,
     required: true
   },
-  reason: {
+  motivo: {
     type: String,
     default: ''
   },
-  performedBy: {
+  realizadoPor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Usuario',
     required: true
   },
-  createdAt: {
+  fechaCreacion: {
     type: Date,
     default: Date.now
   }
 });
 
-const EnrollmentEvent = mongoose.model('EnrollmentEvent', enrollmentEventSchema);
-module.exports = EnrollmentEvent;
+const EventoMatricula = mongoose.model('EventoMatricula', eventoMatriculaSchema);
+module.exports = EventoMatricula;

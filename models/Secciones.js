@@ -1,55 +1,55 @@
 const mongoose = require('mongoose');
 
-const sectionSchema = new mongoose.Schema({
-  subjectId: {
+const seccionSchema = new mongoose.Schema({
+  asignaturaId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Subject',
+    ref: 'Asignatura',
     required: true
   },
-  periodId: {
+  periodoId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Period',
+    ref: 'Periodo',
     required: true
   },
-  sectionCode: {
+  codigoSeccion: {
     type: String,
     required: true
   },
-  teacherName: {
+  nombreDocente: {
     type: String,
     required: true
   },
-  schedule: [{
-    day: {
+  horario: [{
+    dia: {
       type: String,
       required: true
     },
-    startTime: {
+    horaInicio: {
       type: String,
       required: true
     },
-    endTime: {
+    horaFin: {
       type: String,
       required: true
     }
   }],
-  classroom: {
+  aula: {
     type: String,
     required: true
   },
-  capacity: {
+  cupo: {
     type: Number,
     required: true
   },
-  enrolledCount: {
+  cantidadMatriculados: {
     type: Number,
     default: 0
   },
-  status: {
+  estado: {
     type: String,
-    default: 'active'
+    default: 'activo'
   }
 });
 
-const Section = mongoose.model('Section', sectionSchema);
-module.exports = Section;
+const Seccion = mongoose.model('Seccion', seccionSchema);
+module.exports = Seccion;

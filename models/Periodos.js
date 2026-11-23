@@ -1,31 +1,31 @@
 const mongoose = require('mongoose');
 
-const periodSchema = new mongoose.Schema({
-  name: {
+const periodoSchema = new mongoose.Schema({
+  nombre: {
     type: String,
     required: true
   },
-  startDate: {
+  fechaInicio: {
     type: Date,
     required: true
   },
-  enrollmentStart: {
+  inicioMatricula: {
     type: Date,
     required: true
   },
-  enrollmentEnd: {
+  finMatricula: {
     type: Date,
     required: true
   },
-  withdrawalDeadline: {
+  fechaLimiteCancelacion: {
     type: Date,
     required: true
   },
-  status: {
+  estado: {
     type: String,
-    default: 'open'
+    default: 'abierto'
   }
 });
 
-const Period = mongoose.model('Period', periodSchema);
-module.exports = Period;
+const Periodo = mongoose.model('Periodo', periodoSchema);
+module.exports = Periodo;

@@ -1,54 +1,54 @@
 const mongoose = require('mongoose');
 
-const enrollmentSchema = new mongoose.Schema({
-  enrollmentCode: {
+const matriculaSchema = new mongoose.Schema({
+  codigoMatricula: {
     type: String,
     required: true,
     unique: true
   },
-  studentId: {
+  alumnoId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Usuario',
     required: true
   },
-  periodId: {
+  periodoId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Period',
+    ref: 'Periodo',
     required: true
   },
-  status: {
+  estado: {
     type: String,
-    default: 'CONFIRMED'
+    default: 'CONFIRMADA'
   },
-  enrolledAt: {
+  fechaMatricula: {
     type: Date,
     default: Date.now
   },
-  totalCredits: {
+  totalCreditos: {
     type: Number,
     default: 0
   },
-  subjects: [{
-    sectionId: {
+  asignaturas: [{
+    seccionId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Section',
+      ref: 'Seccion',
       required: true
     },
-    subjectId: {
+    asignaturaId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Subject',
+      ref: 'Asignatura',
       required: true
     },
-    credits: {
+    creditos: {
       type: Number,
       required: true
     },
-    status: {
+    estado: {
       type: String,
-      default: 'ACTIVE'
+      default: 'ACTIVA'
     }
   }]
 });
 
-const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
-module.exports = Enrollment;
+const Matricula = mongoose.model('Matricula', matriculaSchema);
+module.exports = Matricula;

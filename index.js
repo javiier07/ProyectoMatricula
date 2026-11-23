@@ -3,6 +3,11 @@ const express = require('express');
 const cors = require('cors');
 const conectarDB = require('./config/database');
 
+
+const carreraRoutes = require('./routes/carreraRoutes');
+const asignaturaRoutes = require('./routes/asignaturaRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -10,6 +15,10 @@ conectarDB();
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/carreras', carreraRoutes);
+app.use('/api/asignaturas', asignaturaRoutes);
+app.use('/api/usuarios', usuarioRoutes);
 
 app.get('/', (req, res) => {
   res.json({ mensaje: 'API del Sistema de Matrícula Universitaria activa' });

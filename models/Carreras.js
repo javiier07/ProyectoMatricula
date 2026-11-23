@@ -1,27 +1,27 @@
 const mongoose = require('mongoose');
 
-const careerSchema = new mongoose.Schema({
-  name: {
+const carreraSchema = new mongoose.Schema({
+  nombre: {
     type: String,
     required: true
   },
-  code: {
+  codigo: {
     type: String,
     required: true,
     unique: true
   },
-  description: {
+  descripcion: {
     type: String
   },
-  maxCredits: {
+  maximoCreditos: {
     type: Number,
     default: 18
   },
-  status: {
+  estado: {
     type: String,
-    default: 'active'
+    default: 'activo'
   }
 });
 
-const Career = mongoose.model('Career', careerSchema);
-module.exports = Career;
+const Carrera = mongoose.model('Carrera', carreraSchema);
+module.exports = Carrera;
