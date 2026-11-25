@@ -1,368 +1,323 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const conectarDB = require('../config/database');
 
-const Carrera = require('../models/Carreras');
-const Usuario = require('../models/Usuarios');
-const Asignatura = require('../models/Asignaturas');
-const Periodo = require('../models/Periodos');
-const Seccion = require('../models/Secciones');
-const Matricula = require('../models/Matriculas');
-const EventoMatricula = require('../models/EventosMatricula');
+const Carrera = require('./models/Carreras');
+const Asignatura = require('./models/Asignaturas');
+const Periodo = require('./models/Periodos');
+const Seccion = require('./models/Secciones');
+const Usuario = require('./models/Usuarios');
 
-const poblarBaseDeDatos = async () => {
-  try {
-    await conectarDB();
-
-    await Promise.all([
-      EventoMatricula.deleteMany({}),
-      Matricula.deleteMany({}),
-      Seccion.deleteMany({}),
-      Asignatura.deleteMany({}),
-      Periodo.deleteMany({}),
-      Usuario.deleteMany({}),
-      Carrera.deleteMany({})
-    ]);
-
-    // 1. Carreras (2 registros)
-    const carreras = await Carrera.create([
-      {
-        nombre: 'Ingeniería en Sistemas',
+const carrerasData = [
+    {
         codigo: 'IS-01',
-        descripcion: 'Desarrollo de software, bases de datos y redes.',
-        maximoCreditos: 18,
+        nombre: 'Ingeniería en Sistemas Computacionales',
+        descripcion: 'Carrera enfocada en desarrollo de software, bases de datos e infraestructura',
+        maximoCreditos: 21,
         estado: 'activo'
-      },
-      {
+    },
+    {
+        codigo: 'AD-01',
         nombre: 'Administración de Empresas',
-        codigo: 'AE-02',
-        descripcion: 'Gestión empresarial, finanzas y contabilidad.',
+        descripcion: 'Gestión financiera, operaciones, estrategia y liderazgo organizacional',
         maximoCreditos: 18,
         estado: 'activo'
-      }
-    ]);
-
-    const carreraSistemas = carreras[0];
-    const carreraAdmin = carreras[1];
-
-    // 2. Períodos académicos (2 registros)
-    const periodos = await Periodo.create([
-      {
-        nombre: 'III Período 2026',
-        fechaInicio: new Date('2026-09-01'),
-        inicioMatricula: new Date('2026-08-20'),
-        finMatricula: new Date('2026-12-10'),
-        fechaLimiteCancelacion: new Date('2026-11-30'),
-        estado: 'abierto'
-      },
-      {
-        nombre: 'I Período 2027',
-        fechaInicio: new Date('2027-01-15'),
-        inicioMatricula: new Date('2027-01-05'),
-        finMatricula: new Date('2027-02-05'),
-        fechaLimiteCancelacion: new Date('2027-03-15'),
-        estado: 'cerrado'
-      }
-    ]);
-
-    const periodoActual = periodos[0];
-
-    // 3. Asignaturas (6 registros)
-    const asignaturas = await Asignatura.create([
-      {
-        codigo: 'INF-201',
-        nombre: 'Programación I',
-        creditos: 4,
-        descripcion: 'Lógica y programación básica.',
-        prerrequisitosIds: [],
-        carreraId: carreraSistemas._id,
+    },
+    {
+        codigo: 'RC-01',
+        nombre: 'Redes y Ciberseguridad',
+        descripcion: 'Arquitectura de redes, administración de servidores y seguridad informática',
+        maximoCreditos: 18,
         estado: 'activo'
-      },
-      {
-        codigo: 'INF-301',
-        nombre: 'Programación Web II',
-        creditos: 4,
-        descripcion: 'Aplicaciones web y servicios.',
-        prerrequisitosIds: [],
-        carreraId: carreraSistemas._id,
+    }
+];
+
+const asignaturasData = [
+    {
+        codigo: 'PRG-102',
+        nombre: 'Programación I Avanzada',
+        creditos: 5,
+        descripcion: 'Fundamentos sólidos de programación y lógica',
+        prerrequisitosCodigos: [],
+        carreraCodigo: 'IS-01',
         estado: 'activo'
-      },
-      {
-        codigo: 'INF-322',
-        nombre: 'Bases de Datos II',
+    },
+    {
+        codigo: 'BD-201',
+        nombre: 'Bases de Datos I',
         creditos: 4,
-        descripcion: 'Consultas avanzadas y administración.',
-        prerrequisitosIds: [],
-        carreraId: carreraSistemas._id,
+        descripcion: 'Modelado relacional, SQL, normalización y gestión de consultas',
+        prerrequisitosCodigos: ['PRG-102'],
+        carreraCodigo: 'IS-01',
         estado: 'activo'
-      },
-      {
-        codigo: 'MAT-210',
-        nombre: 'Matemática Discreta',
+    },
+    {
+        codigo: 'ED-202',
+        nombre: 'Estructuras de Datos',
         creditos: 4,
-        descripcion: 'Lógica, conjuntos y grafos.',
-        prerrequisitosIds: [],
-        carreraId: carreraSistemas._id,
+        descripcion: 'Listas, pilas, colas, árboles, grafos y análisis de complejidad',
+        prerrequisitosCodigos: ['PRG-102'],
+        carreraCodigo: 'IS-01',
         estado: 'activo'
-      },
-      {
-        codigo: 'ADM-101',
-        nombre: 'Principios de Administración',
+    },
+    {
+        codigo: 'DW-301',
+        nombre: 'Desarrollo Web Full Stack',
+        creditos: 4,
+        descripcion: 'Construcción de APIs REST, autenticación e interfaces web modernas',
+        prerrequisitosCodigos: ['BD-201'],
+        carreraCodigo: 'IS-01',
+        estado: 'activo'
+    },
+    {
+        codigo: 'CN-101',
+        nombre: 'Contabilidad General',
         creditos: 3,
-        descripcion: 'Planeación y organización empresarial.',
-        prerrequisitosIds: [],
-        carreraId: carreraAdmin._id,
+        descripcion: 'Principios contables, estados financieros y registros operacionales',
+        prerrequisitosCodigos: [],
+        carreraCodigo: 'AD-01',
         estado: 'activo'
-      },
-      {
-        codigo: 'CON-201',
-        nombre: 'Contabilidad Gerencial',
+    },
+    {
+        codigo: 'RD-201',
+        nombre: 'Fundamentos de Redes',
         creditos: 4,
-        descripcion: 'Análisis de costos y presupuestos.',
-        prerrequisitosIds: [],
-        carreraId: carreraAdmin._id,
+        descripcion: 'Modelos OSI y TCP/IP, direccionamiento IP, ruteo y conmutación',
+        prerrequisitosCodigos: [],
+        carreraCodigo: 'RC-01',
         estado: 'activo'
-      }
-    ]);
+    }
+];
 
-    const [asigProg1, asigWeb2, asigBD2, asigMat, asigAdm, asigCon] = asignaturas;
+const periodosData = [
+    {
+        nombre: '2026-3',
+        fechaInicio: new Date('2026-09-01T00:00:00.000Z'),
+        inicioMatricula: new Date('2026-08-20T00:00:00.000Z'),
+        finMatricula: new Date('2026-09-05T23:59:59.999Z'),
+        fechaLimiteCancelacion: new Date('2026-10-10T23:59:59.999Z'),
+        estado: 'cerrado'
+    },
+    {
+        nombre: '2027-1',
+        fechaInicio: new Date('2027-01-05T00:00:00.000Z'),
+        inicioMatricula: new Date('2027-01-06T00:00:00.000Z'),
+        finMatricula: new Date('2027-01-14T00:00:00.000Z'),
+        fechaLimiteCancelacion: new Date('2027-02-10T00:00:00.000Z'),
+        estado: 'abierto'
+    },
+    {
+        nombre: '2027-2',
+        fechaInicio: new Date('2027-05-01T00:00:00.000Z'),
+        inicioMatricula: new Date('2027-05-20T00:00:00.000Z'),
+        finMatricula: new Date('2027-05-30T23:59:59.999Z'),
+        fechaLimiteCancelacion: new Date('2027-06-25T23:59:59.999Z'),
+        estado: 'cerrado'
+    },
+    {
+        nombre: '2027-3',
+        fechaInicio: new Date('2027-09-01T00:00:00.000Z'),
+        inicioMatricula: new Date('2027-08-18T00:00:00.000Z'),
+        finMatricula: new Date('2027-08-30T23:59:59.999Z'),
+        fechaLimiteCancelacion: new Date('2027-10-15T23:59:59.999Z'),
+        estado: 'abierto'
+    }
+];
 
-    // 4. Usuarios (5 registros)
-    const usuarios = await Usuario.create([
-      {
-        nombres: 'Ana',
-        apellidos: 'Martínez',
-        correo: 'ana.martinez@unah.edu.hn',
-        numeroCuenta: '20241001',
-        contrasenaHash: 'Estudiante123',
-        carreraId: carreraSistemas._id,
-        rol: 'alumno',
-        clasesAprobadasIds: [asigProg1._id],
-        estado: 'activo'
-      },
-      {
-        nombres: 'Luis',
-        apellidos: 'Pineda',
-        correo: 'luis.pineda@unah.edu.hn',
-        numeroCuenta: '20241002',
-        contrasenaHash: 'Estudiante123',
-        carreraId: carreraSistemas._id,
-        rol: 'alumno',
-        clasesAprobadasIds: [],
-        estado: 'activo'
-      },
-      {
-        nombres: 'Sofía',
-        apellidos: 'Flores',
-        correo: 'sofia.flores@unah.edu.hn',
-        numeroCuenta: '20241003',
-        contrasenaHash: 'Estudiante123',
-        carreraId: carreraSistemas._id,
-        rol: 'alumno',
-        clasesAprobadasIds: [asigProg1._id],
-        estado: 'activo'
-      },
-      {
-        nombres: 'Diego',
-        apellidos: 'Valladares',
-        correo: 'diego.valladares@unah.edu.hn',
-        numeroCuenta: '20242001',
-        contrasenaHash: 'Estudiante123',
-        carreraId: carreraAdmin._id,
-        rol: 'alumno',
-        clasesAprobadasIds: [],
-        estado: 'activo'
-      },
-      {
-        nombres: 'Carlos',
-        apellidos: 'Reyes',
-        correo: 'admin.academico@unah.edu.hn',
-        numeroCuenta: '0001',
-        contrasenaHash: 'Admin123',
-        carreraId: carreraSistemas._id,
-        rol: 'admin',
-        clasesAprobadasIds: [],
-        estado: 'activo'
-      }
-    ]);
-
-    const [estAna, estLuis, estSofia, estDiego, adminCarlos] = usuarios;
-
-    // 5. Secciones (6 registros)
-    const secciones = await Seccion.create([
-      {
-        asignaturaId: asigWeb2._id,
-        periodoId: periodoActual._id,
+const seccionesData = [
+    {
+        asignaturaCodigo: 'PRG-102',
+        periodoNombre: '2027-2',
         codigoSeccion: '0800',
-        nombreDocente: 'Ing. Roberto Díaz',
+        nombreDocente: 'Ing. Carlos Mendoza',
         horario: [
-          { dia: 'LUN', horaInicio: '08:00', horaFin: '09:30' },
-          { dia: 'MIE', horaInicio: '08:00', horaFin: '09:30' }
+            { dia: 'Lunes', horaInicio: '08:00', horaFin: '09:30' },
+            { dia: 'Miércoles', horaInicio: '08:00', horaFin: '09:30' }
         ],
-        aula: 'B1-201',
-        cupo: 30,
-        cantidadMatriculados: 2,
-        estado: 'activo'
-      },
-      {
-        asignaturaId: asigBD2._id,
-        periodoId: periodoActual._id,
-        codigoSeccion: '1000',
-        nombreDocente: 'Ing. Lucía Mendoza',
-        horario: [
-          { dia: 'MAR', horaInicio: '10:00', horaFin: '11:30' },
-          { dia: 'JUE', horaInicio: '10:00', horaFin: '11:30' }
-        ],
-        aula: 'LAB-2',
-        cupo: 25,
-        cantidadMatriculados: 1,
-        estado: 'activo'
-      },
-      {
-        asignaturaId: asigMat._id,
-        periodoId: periodoActual._id,
-        codigoSeccion: '1300',
-        nombreDocente: 'Lic. Elena Castro',
-        horario: [
-          { dia: 'LUN', horaInicio: '13:00', horaFin: '14:30' },
-          { dia: 'MIE', horaInicio: '13:00', horaFin: '14:30' }
-        ],
-        aula: 'A1-302',
-        cupo: 30,
-        cantidadMatriculados: 1,
-        estado: 'activo'
-      },
-      {
-        asignaturaId: asigWeb2._id,
-        periodoId: periodoActual._id,
-        codigoSeccion: '1500',
-        nombreDocente: 'Ing. Mario Paz',
-        horario: [
-          { dia: 'MAR', horaInicio: '15:00', horaFin: '16:30' },
-          { dia: 'JUE', horaInicio: '15:00', horaFin: '16:30' }
-        ],
-        aula: 'B2-105',
-        cupo: 20,
-        cantidadMatriculados: 0,
-        estado: 'activo'
-      },
-      {
-        asignaturaId: asigAdm._id,
-        periodoId: periodoActual._id,
-        codigoSeccion: '0900',
-        nombreDocente: 'Lic. Martha Zelaya',
-        horario: [
-          { dia: 'LUN', horaInicio: '09:00', horaFin: '10:30' },
-          { dia: 'MIE', horaInicio: '09:00', horaFin: '10:30' }
-        ],
-        aula: 'C1-102',
+        aula: 'B2-304',
         cupo: 35,
-        cantidadMatriculados: 1,
+        cantidadMatriculados: 0,
         estado: 'activo'
-      },
-      {
-        asignaturaId: asigCon._id,
-        periodoId: periodoActual._id,
-        codigoSeccion: '1100',
-        nombreDocente: 'Lic. Jorge Mejía',
+    },
+    {
+        asignaturaCodigo: 'BD-201',
+        periodoNombre: '2027-2',
+        codigoSeccion: '0800',
+        nombreDocente: 'Ing. Marco Tulio Rivera',
         horario: [
-          { dia: 'MAR', horaInicio: '11:00', horaFin: '12:30' },
-          { dia: 'JUE', horaInicio: '11:00', horaFin: '12:30' }
+            { dia: 'Lunes', horaInicio: '08:00', horaFin: '09:30' },
+            { dia: 'Miércoles', horaInicio: '08:00', horaFin: '09:30' }
         ],
-        aula: 'C1-204',
+        aula: 'B2-201',
+        cupo: 35,
+        cantidadMatriculados: 0,
+        estado: 'activo'
+    },
+    {
+        asignaturaCodigo: 'ED-202',
+        periodoNombre: '2027-2',
+        codigoSeccion: '1000',
+        nombreDocente: 'Lic. Sofía Elena Castellanos',
+        horario: [
+            { dia: 'Martes', horaInicio: '10:00', horaFin: '11:30' },
+            { dia: 'Jueves', horaInicio: '10:00', horaFin: '11:30' }
+        ],
+        aula: 'B1-302',
         cupo: 30,
         cantidadMatriculados: 0,
         estado: 'activo'
-      }
-    ]);
+    },
+    {
+        asignaturaCodigo: 'DW-301',
+        periodoNombre: '2027-1',
+        codigoSeccion: '1400',
+        nombreDocente: 'Ing. Javier Antonio Mejía',
+        horario: [
+            { dia: 'Lunes', horaInicio: '14:00', horaFin: '15:30' },
+            { dia: 'Miércoles', horaInicio: '14:00', horaFin: '15:30' }
+        ],
+        aula: 'LAB-104',
+        cupo: 25,
+        cantidadMatriculados: 0,
+        estado: 'activo'
+    },
+    {
+        asignaturaCodigo: 'CN-101',
+        periodoNombre: '2027-2',
+        codigoSeccion: '0900',
+        nombreDocente: 'Lic. Gabriela Fernández',
+        horario: [
+            { dia: 'Martes', horaInicio: '09:00', horaFin: '10:30' },
+            { dia: 'Jueves', horaInicio: '09:00', horaFin: '10:30' }
+        ],
+        aula: 'A2-105',
+        cupo: 40,
+        cantidadMatriculados: 0,
+        estado: 'activo'
+    },
+    {
+        asignaturaCodigo: 'RD-201',
+        periodoNombre: '2027-1',
+        codigoSeccion: '1100',
+        nombreDocente: 'Ing. Diego Armando Zelaya',
+        horario: [
+            { dia: 'Viernes', horaInicio: '11:00', horaFin: '13:00' }
+        ],
+        aula: 'LAB-202',
+        cupo: 28,
+        cantidadMatriculados: 0,
+        estado: 'activo'
+    }
+];
 
-    const [secWeb0800, secBD1000, secMat1300, secWeb1500, secAdm0900] = secciones;
+const usuariosData = [
+    {
+        nombres: 'Edwar Javier',
+        apellidos: 'Valeriano Aviles',
+        correo: 'edwar.valeriano@unah.edu.hn',
+        numeroCuenta: '20231004512',
+        contraseñaHash: '$2b$10$hashSimuladoAlumno001',
+        carreraCodigo: 'IS-01',
+        rol: 'alumno',
+        asignaturasAprobadasCodigo: ['PRG-102'],
+        estado: 'activo'
+    },
+    {
+        nombres: 'Valeria Nicole',
+        apellidos: 'Pineda Suazo',
+        correo: 'valeria.pineda@unah.edu.hn',
+        numeroCuenta: '20231008891',
+        contraseñaHash: '$2b$10$hashSimuladoAlumno002',
+        carreraCodigo: 'IS-01',
+        rol: 'alumno',
+        asignaturasAprobadasCodigo: ['PRG-102', 'BD-201'],
+        estado: 'activo'
+    },
+    {
+        nombres: 'Carlos Eduardo',
+        apellidos: 'Mendoza Lagos',
+        correo: 'carlos.mendoza@unah.edu.hn',
+        numeroCuenta: '20192001120',
+        contraseñaHash: '$2b$10$hashSimuladoDocente001',
+        carreraCodigo: 'IS-01',
+        rol: 'docente',
+        asignaturasAprobadasCodigo: [],
+        estado: 'activo'
+    },
+    {
+        nombres: 'Andrea Marcela',
+        apellidos: 'Reyes Dubón',
+        correo: 'andrea.reyes@unah.edu.hn',
+        numeroCuenta: '20241003345',
+        contraseñaHash: '$2b$10$hashSimuladoAlumno003',
+        carreraCodigo: 'AD-01',
+        rol: 'alumno',
+        asignaturasAprobadasCodigo: [],
+        estado: 'activo'
+    },
+    {
+        nombres: 'Administrador',
+        apellidos: 'Registro Académico',
+        correo: 'admin.matricula@unah.edu.hn',
+        numeroCuenta: '20001000001',
+        contraseñaHash: '$2b$10$hashSimuladoAdmin001',
+        carreraCodigo: 'IS-01',
+        rol: 'admin',
+        asignaturasAprobadasCodigo: [],
+        estado: 'activo'
+    }
+];
 
-    // 6. Matrículas (3 registros)
-    const matriculas = await Matricula.create([
-      {
-        codigoMatricula: 'MAT-2026-001',
-        alumnoId: estAna._id,
-        periodoId: periodoActual._id,
-        estado: 'CONFIRMADA',
-        totalCreditos: 8,
-        asignaturas: [
-          {
-            seccionId: secWeb0800._id,
-            asignaturaId: asigWeb2._id,
-            creditos: 4,
-            estado: 'ACTIVA'
-          },
-          {
-            seccionId: secBD1000._id,
-            asignaturaId: asigBD2._id,
-            creditos: 4,
-            estado: 'ACTIVA'
-          }
-        ]
-      },
-      {
-        codigoMatricula: 'MAT-2026-002',
-        alumnoId: estLuis._id,
-        periodoId: periodoActual._id,
-        estado: 'CONFIRMADA',
-        totalCreditos: 4,
-        asignaturas: [
-          {
-            seccionId: secMat1300._id,
-            asignaturaId: asigMat._id,
-            creditos: 4,
-            estado: 'ACTIVA'
-          }
-        ]
-      },
-      {
-        codigoMatricula: 'MAT-2026-003',
-        alumnoId: estDiego._id,
-        periodoId: periodoActual._id,
-        estado: 'CONFIRMADA',
-        totalCreditos: 3,
-        asignaturas: [
-          {
-            seccionId: secAdm0900._id,
-            asignaturaId: asigAdm._id,
-            creditos: 3,
-            estado: 'ACTIVA'
-          }
-        ]
-      }
-    ]);
-
-    const [matAna, matLuis, matDiego] = matriculas;
-
-    // 7. Eventos de matrícula (2 registros)
-    await EventoMatricula.create([
-      {
-        matriculaId: matAna._id,
-        alumnoId: estAna._id,
-        seccionId: secWeb0800._id,
-        accion: 'MATRICULAR',
-        motivo: 'Matrícula inicial de prueba',
-        realizadoPor: adminCarlos._id
-      },
-      {
-        matriculaId: matLuis._id,
-        alumnoId: estLuis._id,
-        seccionId: secMat1300._id,
-        accion: 'MATRICULAR',
-        motivo: 'Matrícula inicial de prueba',
-        realizadoPor: adminCarlos._id
-      }
-    ]);
-
-    console.log('Seed completado con 26 registros de prueba.');
-    await mongoose.connection.close();
-    process.exit(0);
-  } catch (error) {
-    console.error('Error al ejecutar el seed:', error.message);
-    await mongoose.connection.close();
-    process.exit(1);
-  }
+// Usa updateOne con upsert: true para no fallar si ya existen algunos documentos
+const upsertLote = async (Model, items, construirFiltro) => {
+    let procesados = 0;
+    for (const item of items) {
+        const filtro = construirFiltro(item);
+        await Model.updateOne(
+            filtro,
+            { $setOnInsert: item },
+            { upsert: true, runValidators: true }
+        );
+        procesados++;
+    }
+    return procesados;
 };
 
-poblarBaseDeDatos();
+const runSeed = async () => {
+    const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+    if (!uri) {
+        throw new Error('No se encontró MONGODB_URI ni MONGO_URI en el archivo .env');
+    }
+
+    await mongoose.connect(uri);
+    console.log('Conectado a MongoDB para ejecutar seed...');
+
+    const totalCarreras = await upsertLote(Carrera, carrerasData, (c) => ({ codigo: c.codigo }));
+    console.log(`Carreras procesadas: ${totalCarreras}`);
+
+    const totalAsignaturas = await upsertLote(Asignatura, asignaturasData, (a) => ({ codigo: a.codigo }));
+    console.log(`Asignaturas procesadas: ${totalAsignaturas}`);
+
+    const totalPeriodos = await upsertLote(Periodo, periodosData, (p) => ({ nombre: p.nombre }));
+    console.log(`Períodos procesados: ${totalPeriodos}`);
+
+    const totalSecciones = await upsertLote(Seccion, seccionesData, (s) => ({
+        periodoNombre: s.periodoNombre,
+        asignaturaCodigo: s.asignaturaCodigo,
+        codigoSeccion: s.codigoSeccion
+    }));
+    console.log(`Secciones procesadas: ${totalSecciones}`);
+
+    const totalUsuarios = await upsertLote(Usuario, usuariosData, (u) => ({ numeroCuenta: u.numeroCuenta }));
+    console.log(`Usuarios procesados: ${totalUsuarios}`);
+
+    console.log('Seed completado con éxito.');
+};
+
+runSeed()
+    .catch((err) => {
+        console.error('Error ejecutando seed:', err);
+        process.exitCode = 1;
+    })
+    .finally(async () => {
+        await mongoose.disconnect();
+    });
