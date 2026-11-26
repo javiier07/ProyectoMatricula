@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel del Estudiante - Sistema de Matrícula</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-body-tertiary">
+    <header class="bg-primary bg-gradient text-white shadow-sm">
+      <nav class="container py-3 d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <a href="/panel.html" class="text-white text-decoration-none fw-bold fs-5 d-flex align-items-center gap-2">
+          <i class="bi bi-mortarboard-fill"></i>
+          <span>Sistema de Matrícula</span>
+        </a>
+        <ul class="nav nav-pills flex-wrap gap-1">
+          <li class="nav-item">
+            <a class="nav-link active bg-white text-primary fw-semibold" href="/panel.html">Panel</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="oferta.html">Oferta académica</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="seleccion.html">
+              Selección <span class="badge text-bg-warning ms-1">4</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="confirmacion.html">Confirmación</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="matricula.html">Mi matrícula</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="comprobante.html">Comprobante</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="administracion.html">Administración</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50" href="index.html">
+              <i class="bi bi-box-arrow-right me-1"></i>Salir
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container py-4 py-md-5">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+          <span class="badge text-bg-primary mb-2">Período Académico 2026 - II</span>
+          <h1 class="h3 fw-bold mb-1">Panel del Estudiante</h1>
+          <p class="text-body-secondary mb-0">
+            Cuenta: <strong>20231001234</strong> · Ana Sofía Martínez · Ingeniería en Sistemas
+          </p>
+        </div>
+        <div class="text-md-end">
+          <span class="badge text-bg-warning px-3 py-2 fs-6">
+            <i class="bi bi-clock-history me-1"></i>Estado: Selección en proceso
+          </span>
+        </div>
+      </div>
+
+      <section class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="text-body-secondary small fw-semibold">Período activo</span>
+                <i class="bi bi-calendar3 text-primary fs-5"></i>
+              </div>
+              <h2 class="h4 fw-bold mb-1">2026 - II</h2>
+              <p class="small text-body-secondary mb-0">Matrícula abierta hasta el 30 nov</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="text-body-secondary small fw-semibold">Estado de matrícula</span>
+                <i class="bi bi-check2-circle text-warning fs-5"></i>
+              </div>
+              <h2 class="h4 fw-bold mb-1">Provisional</h2>
+              <p class="small text-body-secondary mb-0">Pendiente de confirmación final</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="text-body-secondary small fw-semibold">Créditos inscritos</span>
+                <i class="bi bi-journal-bookmark-fill text-success fs-5"></i>
+              </div>
+              <h2 class="h4 fw-bold mb-1">16 / 20</h2>
+              <p class="small text-body-secondary mb-0">4 créditos disponibles por usar</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="text-body-secondary small fw-semibold">Asignaturas elegidas</span>
+                <i class="bi bi-list-check text-info fs-5"></i>
+              </div>
+              <h2 class="h4 fw-bold mb-1">4 materias</h2>
+              <p class="small text-body-secondary mb-0">1 conflicto pendiente de revisar</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="row g-4 mb-4">
+        <div class="col-lg-7">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+              <h2 class="h5 fw-bold mb-0">Resumen del Período y Carga Académica</h2>
+            </div>
+            <div class="card-body p-4">
+              <div class="mb-4">
+                <div class="d-flex justify-content-between small fw-semibold mb-2">
+                  <span>Progreso de créditos seleccionados</span>
+                  <span>16 de 20 créditos</span>
+                </div>
+                <div class="progress" role="progressbar" aria-label="Progreso de créditos" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                  <div class="progress-bar bg-primary w-75"></div>
+                </div>
+              </div>
+
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item px-0 d-flex justify-content-between">
+                  <span class="text-body-secondary">Cita asignada de matrícula</span>
+                  <span class="fw-semibold">25 nov 2026 · 08:00 a. m. - 11:59 p. m.</span>
+                </li>
+                <li class="list-group-item px-0 d-flex justify-content-between">
+                  <span class="text-body-secondary">Límite máximo de créditos</span>
+                  <span class="fw-semibold">20 créditos</span>
+                </li>
+                <li class="list-group-item px-0 d-flex justify-content-between">
+                  <span class="text-body-secondary">Período de retiros permitidos</span>
+                  <span class="fw-semibold">01 dic 2026 - 12 dic 2026</span>
+                </li>
+                <li class="list-group-item px-0 d-flex justify-content-between">
+                  <span class="text-body-secondary">Solvencia administrativa</span>
+                  <span class="badge text-bg-success">Solvente</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+              <h2 class="h5 fw-bold mb-0">Accesos Rápidos</h2>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-grid gap-2">
+                <a href="oferta.html" class="btn btn-primary btn-lg text-start d-flex justify-content-between align-items-center">
+                  <span><i class="bi bi-search me-2"></i>Explorar oferta académica</span>
+                  <i class="bi bi-arrow-right"></i>
+                </a>
+                <a href="seleccion.html" class="btn btn-outline-primary text-start d-flex justify-content-between align-items-center">
+                  <span><i class="bi bi-cart-check me-2"></i>Ver selección provisional</span>
+                  <span class="badge text-bg-warning">4</span>
+                </a>
+                <a href="confirmacion.html" class="btn btn-outline-success text-start d-flex justify-content-between align-items-center">
+                  <span><i class="bi bi-shield-check me-2"></i>Confirmar matrícula</span>
+                  <i class="bi bi-arrow-right"></i>
+                </a>
+                <a href="mi-matricula.html" class="btn btn-outline-secondary text-start d-flex justify-content-between align-items-center">
+                  <span><i class="bi bi-card-checklist me-2"></i>Consultar mi matrícula</span>
+                  <i class="bi bi-arrow-right"></i>
+                </a>
+                <a href="comprobante.html" class="btn btn-outline-secondary text-start d-flex justify-content-between align-items-center">
+                  <span><i class="bi bi-printer me-2"></i>Ver comprobante imprimible</span>
+                  <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
