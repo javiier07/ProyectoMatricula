@@ -21,8 +21,10 @@ const asignaturaMatriculadaSchema = new mongoose.Schema(
     },
     estado: {
       type: String,
-      enum: ['ACTIVA', 'CANCELADA', 'APROBADA', 'REPROBADA'],
-      default: 'ACTIVA'
+      enum: ['activa', 'cancelada', 'aprobada', 'reprobada'],
+      default: 'activa',
+      trim: true,
+      uppercase: false
     }
   },
   { _id: false }
@@ -51,8 +53,10 @@ const matriculaSchema = new mongoose.Schema(
     },
     estado: {
       type: String,
-      enum: ['CONFIRMADA', 'CANCELADA', 'PENDIENTE'],
-      default: 'CONFIRMADA'
+      enum: ['confirmada', 'cancelada', 'pendiente'],
+      default: 'confirmada',
+      trim: true,
+      lowercase: true
     },
     fechaMatricula: {
       type: Date,
