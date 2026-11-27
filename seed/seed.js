@@ -1,11 +1,11 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-const Carrera = require('./models/Carreras');
-const Asignatura = require('./models/Asignaturas');
-const Periodo = require('./models/Periodos');
-const Seccion = require('./models/Secciones');
-const Usuario = require('./models/Usuarios');
+const Carrera = require('../models/Carreras');
+const Asignatura = require('../models/Asignaturas');
+const Periodo = require('../models/Periodos');
+const Seccion = require('../models/Secciones');
+const Usuario = require('../models/Usuarios');
 
 const carrerasData = [
     {
